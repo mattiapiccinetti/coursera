@@ -132,16 +132,16 @@ class Empty extends TweetSet {
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet =
-    if (p(elem)) left.filterAcc(p, right.filterAcc(p, acc incl elem))
-    else left.filterAcc(p, right.filterAcc(p, acc))
+    if (p(elem)) left.filterAcc(p, acc) union right.filterAcc(p, acc) incl elem
+    else left.filterAcc(p, acc) union right.filterAcc(p, acc)
 
   def union(that: TweetSet): TweetSet = ((left union right) union that) incl elem
 
   def mostRetweeted: Tweet = (left, right) match {
     case (_: Empty, _: Empty) => elem
-    case (_: Empty, _) => max(elem, right.mostRetweeted)
-    case (_, _: Empty) => max(elem, left.mostRetweeted)
-    case _ => max(elem, max(left.mostRetweeted, right.mostRetweeted))
+    case (_: Empty, _)        => max(elem, right.mostRetweeted)
+    case (_, _: Empty)        => max(elem, left.mostRetweeted)
+    case _                    => max(elem, max(left.mostRetweeted, right.mostRetweeted))
   }
 
   private def max(left: Tweet, right: Tweet) = if (left.retweets > right.retweets) left else right
