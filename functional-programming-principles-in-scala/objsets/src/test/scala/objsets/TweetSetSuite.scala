@@ -1,3 +1,4 @@
+
 package objsets
 
 import org.scalatest.FunSuite
@@ -17,6 +18,7 @@ class TweetSetSuite extends FunSuite {
     val set4c = set3.incl(c)
     val set4d = set3.incl(d)
     val set5 = set4c.incl(d)
+    val set6 = set5.incl(new Tweet("x", "x body", 42))
   }
 
   def asSet(tweets: TweetSet): Set[Tweet] = {
@@ -63,10 +65,29 @@ class TweetSetSuite extends FunSuite {
     }
   }
 
+  test("most retweeted: set2 single tweet") {
+    new TestSets {
+      val actual = set2.mostRetweeted
+      assert(actual.user == "a")
+      assert(actual.text == "a body")
+      assert(actual.retweets == 20)
+    }
+  }
+
+  test("most retweeted: set6") {
+    new TestSets {
+      val actual = set6.mostRetweeted
+      assert(actual.user == "x")
+      assert(actual.text == "x body")
+      assert(actual.retweets == 42)
+    }
+  }
+
   test("descending: set5") {
     new TestSets {
       val trends = set5.descendingByRetweet
-      assert(!trends.isEmpty)
+      //assert(!trends.isEmpty)
+      println(trends)
       assert(trends.head.user == "a" || trends.head.user == "b")
     }
   }
