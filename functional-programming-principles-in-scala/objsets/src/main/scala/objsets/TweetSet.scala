@@ -34,8 +34,6 @@ class Tweet(val user: String, val text: String, val retweets: Int) {
  */
 abstract class TweetSet {
 
-  def isEmpty: Boolean
-
   /**
    * This method takes a predicate and returns a subset of all the elements
    * in the original set for which the predicate is true.
@@ -110,8 +108,6 @@ abstract class TweetSet {
 
 class Empty extends TweetSet {
 
-  def isEmpty: Boolean = true
-
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = acc
 
   def union(that: TweetSet): TweetSet = that
@@ -135,26 +131,20 @@ class Empty extends TweetSet {
 
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
-  def isEmpty: Boolean = false
-
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet =
     if (p(elem)) left.filterAcc(p, right.filterAcc(p, acc incl elem))
     else left.filterAcc(p, right.filterAcc(p, acc))
 
   def union(that: TweetSet): TweetSet = ((left union right) union that) incl elem
 
-  def mostRetweeted: Tweet = {
-    lazy val thatTweet = mostRetweetedSet(left, right).mostRetweeted
-
-    if (left.isEmpty && right.isEmpty || elem.retweets > thatTweet.retweets) elem
-    else thatTweet
+  def mostRetweeted: Tweet = (left, right) match {
+    case (_: Empty, _: Empty) => elem
+    case (_: Empty, _) => max(elem, right.mostRetweeted)
+    case (_, _: Empty) => max(elem, left.mostRetweeted)
+    case _ => max(elem, max(left.mostRetweeted, right.mostRetweeted))
   }
 
-  private def mostRetweetedSet(left: TweetSet, right: TweetSet): TweetSet =
-      if (left.isEmpty) right
-      else if (right.isEmpty) left
-      else if (left.mostRetweeted.retweets > right.mostRetweeted.retweets) left
-      else right
+  private def max(left: Tweet, right: Tweet) = if (left.retweets > right.retweets) left else right
 
   def descendingByRetweet: TweetList = new Cons(mostRetweeted, remove(mostRetweeted).descendingByRetweet)
 
