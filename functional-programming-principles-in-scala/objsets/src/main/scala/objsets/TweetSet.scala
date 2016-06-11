@@ -143,12 +143,18 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def union(that: TweetSet): TweetSet = ((left union right) union that) incl elem
 
-  def mostRetweeted: Tweet =
-    if (!left.isEmpty && left.mostRetweeted.retweets > elem.retweets)
-      if (!right.isEmpty && right.mostRetweeted.retweets > left.mostRetweeted.retweets) right.mostRetweeted
-      else left.mostRetweeted
-    else if (!right.isEmpty && right.mostRetweeted.retweets > elem.retweets) right.mostRetweeted
-    else elem
+  def mostRetweeted: Tweet = {
+    lazy val thatTweet = mostRetweetedSet(left, right).mostRetweeted
+
+    if (left.isEmpty && right.isEmpty || elem.retweets > thatTweet.retweets) elem
+    else thatTweet
+  }
+
+  private def mostRetweetedSet(left: TweetSet, right: TweetSet): TweetSet =
+      if (left.isEmpty) right
+      else if (right.isEmpty) left
+      else if (left.mostRetweeted.retweets > right.mostRetweeted.retweets) left
+      else right
 
   def descendingByRetweet: TweetList = new Cons(mostRetweeted, remove(mostRetweeted).descendingByRetweet)
 
