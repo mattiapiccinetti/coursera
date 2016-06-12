@@ -67,6 +67,8 @@ abstract class TweetSet {
    */
   def mostRetweeted: Tweet
 
+  def getTheMostRetweeted(tweet: Tweet): Tweet
+
   /**
    * Returns a list containing all tweets of this set, sorted by retweet count
    * in descending order. In other words, the head of the resulting list should
@@ -114,6 +116,8 @@ class Empty extends TweetSet {
 
   def mostRetweeted: Tweet = throw new java.util.NoSuchElementException()
 
+  def getTheMostRetweeted(tweet: Tweet): Tweet = tweet
+
   def descendingByRetweet: TweetList = Nil
 
   /**
@@ -137,14 +141,11 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def union(that: TweetSet): TweetSet = left union (right union (that incl elem))
 
-  def mostRetweeted: Tweet = (left, right) match {
-    case (_: Empty, _: Empty) => elem
-    case (_: Empty, _)        => max(elem, right.mostRetweeted)
-    case (_, _: Empty)        => max(elem, left.mostRetweeted)
-    case _                    => max(elem, max(left.mostRetweeted, right.mostRetweeted))
-  }
+  def mostRetweeted: Tweet = getTheMostRetweeted(elem)
 
-  private def max(left: Tweet, right: Tweet) = if (left.retweets > right.retweets) left else right
+  def getTheMostRetweeted(tweet: Tweet): Tweet = remove(elem) getTheMostRetweeted max(elem, tweet)
+
+  private def max(left: Tweet, right: Tweet): Tweet = if (left.retweets > right.retweets) left else right
 
   def descendingByRetweet: TweetList = new Cons(mostRetweeted, remove(mostRetweeted).descendingByRetweet)
 
