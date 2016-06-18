@@ -1,4 +1,4 @@
-	package patmat
+  package patmat
 
 import org.scalatest.FunSuite
 
@@ -9,29 +9,29 @@ import patmat.Huffman._
 
 @RunWith(classOf[JUnitRunner])
 class HuffmanSuite extends FunSuite {
-	trait TestTrees {
-		val t1 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
-		val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
-	}
+  trait TestTrees {
+    val t1 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
+    val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
+  }
 
 
   test("weight of a larger tree") {
     new TestTrees {
       assert(weight(t1) === 5)
-			assert(weight(t2) === 9)
+      assert(weight(t2) === 9)
     }
   }
 
-	test("frequency of each character in the text") {
-		new TestTrees {
-			assert(times(List[Char]()) === Nil)
-			assert(times(List('x')) === List(('x', 1)))
-			assert(times(List('x', 'x')) === List(('x', 2)))
-			assert(times(List('f', 'o', 'o')) === List(('f', 1), ('o', 2)))
-			assert(times(List('b', 'a', 'r')) === List(('b', 1), ('a', 1), ('r', 1)))
-			assert(times(List('b', 'o', 'b')) === List(('b', 2), ('o', 1)))
-		}
-	}
+  test("frequency of each character in the text") {
+    new TestTrees {
+      assert(times(List[Char]()) === Nil)
+      assert(times(List('x')) === List(('x', 1)))
+      assert(times(List('x', 'x')) === List(('x', 2)))
+      assert(times(List('f', 'o', 'o')) === List(('f', 1), ('o', 2)))
+      assert(times(List('b', 'a', 'r')) === List(('b', 1), ('a', 1), ('r', 1)))
+      assert(times(List('b', 'o', 'b')) === List(('b', 2), ('o', 1)))
+    }
+  }
 
   test("chars of a larger tree") {
     new TestTrees {
