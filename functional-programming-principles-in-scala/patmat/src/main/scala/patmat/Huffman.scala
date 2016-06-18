@@ -75,13 +75,14 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-  def times(chars: List[Char]): List[(Char, Int)] = {
-    def loop(char: Char, chars: List[Char], times: Int): (Char, Int) =
-      if (chars.isEmpty) (char, times)
-      else loop(char, chars.tail, if (char == chars.head) times + 1 else times)
+  def times(chars: List[Char]): List[(Char, Int)] = chars match {
+    case List() => List()
+    case head :: tail => loop(head, tail, 1) :: times(tail filter { _ != head })
+  }
 
-    if (chars.isEmpty) Nil
-    else loop(chars.head, chars.tail, 1) :: times(chars.tail.filter { x => x != chars.head})
+  def loop(char: Char, chars: List[Char], times: Int): (Char, Int) = chars match {
+    case List() => (char, times)
+    case head :: tail => loop(char, tail, if (char == head) times + 1 else times)
   }
 
   /**
