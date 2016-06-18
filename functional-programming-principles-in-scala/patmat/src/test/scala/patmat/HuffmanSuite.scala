@@ -49,12 +49,21 @@ class HuffmanSuite extends FunSuite {
     assert(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))) === List(Leaf('e',1), Leaf('t',2), Leaf('x',3)))
   }
 
+  test("check whether the list `trees` contains only one single code tree") {
+    assert(!singleton(List()))
+    assert(singleton(List(Leaf('x', 42))))
+    assert(!singleton(List(Leaf('x', 42), Leaf('y', 1))))
+  }
+
+  test("combine of a leaf list with size less than 2") {
+    assert(combine(List()) === List())
+    assert(combine(List(Leaf('e', 1))) === List(Leaf('e', 1)))
+  }
 
   test("combine of some leaf list") {
     val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
     assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
   }
-
 
   test("decode and encode a very short text should be identity") {
     new TestTrees {
