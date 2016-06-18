@@ -77,12 +77,7 @@ object Huffman {
    */
   def times(chars: List[Char]): List[(Char, Int)] = chars match {
     case List() => List()
-    case head :: tail => loop(head, tail, 1) :: times(tail filter { _ != head })
-  }
-
-  def loop(char: Char, chars: List[Char], times: Int): (Char, Int) = chars match {
-    case List() => (char, times)
-    case head :: tail => loop(char, tail, if (char == head) times + 1 else times)
+    case head :: tail => (head, tail.foldLeft(1) { (acc, x) => if (head == x) acc + 1 else acc }) :: times(tail filter { _ != head })
   }
 
   /**
