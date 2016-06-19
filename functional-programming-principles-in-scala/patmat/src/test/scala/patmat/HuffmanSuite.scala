@@ -90,4 +90,19 @@ class HuffmanSuite extends FunSuite {
   test("encode the text into a list of bits") {
     assert(encode(Fork(Leaf('f', 1), Leaf('o', 2), List('f', 'o'), 3))("foo".toList) === List(0, 1, 1))
   }
+
+  test("codeBits returns the bit sequence that represents the character in the code table") {
+    val table = ('x', List(1, 0, 0)) :: ('y', List(1, 1, 0)) :: ('z', List(1, 1, 1)) :: Nil
+
+    assert(codeBits(table)('x') === List(1, 0, 0))
+    assert(codeBits(table)('y') === List(1, 1, 0))
+    assert(codeBits(table)('z') === List(1, 1, 1))
+  }
+
+  test("convert a given tree into a code table") {
+    val tree = Fork(Leaf('f', 1), Leaf('o', 2), List('f', 'o'), 3)
+
+    assert(convert(tree) === ('f', List(0)) :: ('o', List(1)) :: Nil)
+  }
+
 }
