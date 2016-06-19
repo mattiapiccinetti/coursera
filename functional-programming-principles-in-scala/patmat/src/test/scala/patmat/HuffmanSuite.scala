@@ -105,4 +105,10 @@ class HuffmanSuite extends FunSuite {
     assert(convert(tree) === ('f', List(0)) :: ('o', List(1)) :: Nil)
   }
 
+  test("quickEncode should encode a given text into a list of bits") {
+    val tree = Fork(Leaf('f', 1), Leaf('o', 2), List('f', 'o'), 3)
+    val text = "foo".toList
+    
+    assert(quickEncode(tree)(text) === List(0, 1, 1))
+  }
 }
