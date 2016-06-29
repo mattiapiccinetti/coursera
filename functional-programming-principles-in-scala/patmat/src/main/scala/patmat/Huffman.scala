@@ -87,8 +87,8 @@ object Huffman {
    * head of the list should have the smallest weight), where the weight
    * of a leaf is the frequency of the character.
    */
-  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = freqs sortWith { _._2 < _._2 } map { x => Leaf(x._1, x._2) }
-
+  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] =
+    freqs sortWith { _._2 < _._2 } map { x => Leaf(x._1, x._2) }
 
   /**
    * Checks whether the list `trees` contains only one single code tree.
@@ -108,7 +108,7 @@ object Huffman {
    * unchanged.
    */
     def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
-      case x :: y :: tail => makeCodeTree(x, y) :: combine(tail) sortWith { weight(_) < weight(_) }
+      case x :: y :: tail => makeCodeTree(x, y) :: tail sortWith { weight(_) < weight(_) }
       case _ => trees
     }
 
@@ -155,7 +155,7 @@ object Huffman {
    */
   def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
     def traverse(subTree: CodeTree, bits: List[Bit]): List[Char] = subTree match {
-      case Leaf(char, _) if bits.isEmpty => char :: Nil
+      case Leaf(char, _) if bits.isEmpty => List(char)
       case Leaf(char, _) => char :: traverse(tree, bits)
       case Fork(left, _, _, _) if bits.head == 0 => traverse(left, bits.tail)
       case Fork(_, right, _, _) if bits.head == 1 => traverse(right, bits.tail)
@@ -190,13 +190,12 @@ object Huffman {
    * into a sequence of bits.
    */
   def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-    def traverse(text: List[Char]): List[Bit] = tree match {
-        case _ if text.isEmpty => List()
-        case Leaf(_, _) => traverse(text.tail)
-        case Fork(left, _, _, _) if chars(left).contains(text.head) => 0 :: traverse(text.tail)
-        case Fork(_, right, _, _) if chars(right).contains(text.head) => 1 :: traverse(text.tail)
+    def traverse(subTree: CodeTree)(char: Char): List[Bit] = subTree match {
+        case Leaf(_, _) => List()
+        case Fork(left, _, _, _) if chars(left).contains(char) => 0 :: traverse(left)(char)
+        case Fork(_, right, _, _) if chars(right).contains(char) => 1 :: traverse(right)(char)
       }
-    traverse(text)
+    text flatMap(traverse)(tree)
   }
 
   // Part 4b: Encoding using code table
