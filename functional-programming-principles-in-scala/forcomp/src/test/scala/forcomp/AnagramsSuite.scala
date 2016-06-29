@@ -26,11 +26,19 @@ class AnagramsSuite extends FunSuite  {
     assert(wordOccurrences("") === List())
   }
 
-  // test("sentenceOccurrences: abcd e") {
-  //   assert(sentenceOccurrences(List("abcd", "e")) === List(('a', 1), ('b', 1), ('c', 1), ('d', 1), ('e', 1)))
-  // }
-  //
-  //
+  test("sentenceOccurrences: abcd e") {
+    assert(sentenceOccurrences(List("abcd", "e")) === List(('a', 1), ('b', 1), ('c', 1), ('d', 1), ('e', 1)))
+  }
+
+  test("sentenceOccurrences: foo bar") {
+    assert(sentenceOccurrences(List("foo", "bar")) === List(('a', 1), ('b', 1), ('f', 1), ('o', 2), ('r', 1)))
+  }
+
+  test("sentenceOccurrences: empty sentence") {
+    assert(sentenceOccurrences(List()) === List())
+  }
+
+
   // test("dictionaryByOccurrences.get: eat") {
   //   assert(dictionaryByOccurrences.get(List(('a', 1), ('e', 1), ('t', 1))).map(_.toSet) === Some(Set("ate", "eat", "tea")))
   // }
