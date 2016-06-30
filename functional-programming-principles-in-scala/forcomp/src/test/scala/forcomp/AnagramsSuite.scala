@@ -58,32 +58,56 @@ class AnagramsSuite extends FunSuite  {
     assert(wordAnagrams("player").toSet === Set("parley", "pearly", "player", "replay"))
   }
 
+  test("combinations: []") {
+    assert(combinations(Nil) === List(Nil))
+  }
+
+  test("combinations: ab") {
+    val abba = List(('a', 1), ('b', 1))
+    val abbacomb = List(
+      List(),
+      List(('a', 1)),
+      List(('b', 1)),
+      List(('a', 1), ('b', 1))
+    )
+    assert(combinations(abba).toSet === abbacomb.toSet)
+  }
+
+  test("combinations: foo") {
+    val abba = List(('f', 1), ('o', 2))
+    val abbacomb = List(
+      List(),
+      List(('f', 1)),
+      List(('o', 1)),
+      List(('o', 2)),
+      List(('f', 1), ('o', 1)),
+      List(('f', 1), ('o', 2))
+    )
+    assert(combinations(abba).toSet === abbacomb.toSet)
+  }
+
+
+  test("combinations: abba") {
+    val abba = List(('a', 2), ('b', 2))
+    val abbacomb = List(
+      List(),
+      List(('a', 1)),
+      List(('a', 2)),
+      List(('b', 1)),
+      List(('a', 1), ('b', 1)),
+      List(('a', 2), ('b', 1)),
+      List(('b', 2)),
+      List(('a', 1), ('b', 2)),
+      List(('a', 2), ('b', 2))
+    )
+    assert(combinations(abba).toSet === abbacomb.toSet)
+  }
+
   // test("subtract: lard - r") {
   //   val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
   //   val r = List(('r', 1))
   //   val lad = List(('a', 1), ('d', 1), ('l', 1))
   //   assert(subtract(lard, r) === lad)
-  // }
-  //
-  //
-  // test("combinations: []") {
-  //   assert(combinations(Nil) === List(Nil))
-  // }
-  //
-  // test("combinations: abba") {
-  //   val abba = List(('a', 2), ('b', 2))
-  //   val abbacomb = List(
-  //     List(),
-  //     List(('a', 1)),
-  //     List(('a', 2)),
-  //     List(('b', 1)),
-  //     List(('a', 1), ('b', 1)),
-  //     List(('a', 2), ('b', 1)),
-  //     List(('b', 2)),
-  //     List(('a', 1), ('b', 2)),
-  //     List(('a', 2), ('b', 2))
-  //   )
-  //   assert(combinations(abba).toSet === abbacomb.toSet)
   // }
   //
   //
