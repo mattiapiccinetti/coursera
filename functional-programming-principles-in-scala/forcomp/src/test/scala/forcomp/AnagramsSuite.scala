@@ -103,14 +103,28 @@ class AnagramsSuite extends FunSuite  {
     assert(combinations(abba).toSet === abbacomb.toSet)
   }
 
-  // test("subtract: lard - r") {
-  //   val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
-  //   val r = List(('r', 1))
-  //   val lad = List(('a', 1), ('d', 1), ('l', 1))
-  //   assert(subtract(lard, r) === lad)
-  // }
-  //
-  //
+  test("subtract: lard - r") {
+    val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
+    val r = List(('r', 1))
+    val lad = List(('a', 1), ('d', 1), ('l', 1))
+    assert(subtract(lard, r) === lad)
+  }
+
+  test("subtract: lard - ar") {
+    val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
+    val ar = List(('a', 1), ('r', 1))
+    val dl = List(('d', 1), ('l', 1))
+    assert(subtract(lard, ar) === dl)
+  }
+
+  test("subtract: foo - boo == bf") {
+    val foo = List(('f', 1), ('o', 2))
+    val boo = List(('b', 1), ('o', 2))
+    val bf = List(('b', 1), ('f', 1))
+
+    assert(subtract(foo, boo) === bf)
+  }
+
   // test("sentence anagrams: []") {
   //   val sentence = List()
   //   assert(sentenceAnagrams(sentence) === List(Nil))
