@@ -125,11 +125,11 @@ class AnagramsSuite extends FunSuite  {
     assert(subtract(foo, boo) === bf)
   }
 
-  // test("sentence anagrams: []") {
-  //   val sentence = List()
-  //   assert(sentenceAnagrams(sentence) === List(Nil))
-  // }
-  //
+  test("sentence anagrams: []") {
+    val sentence = List()
+    assert(sentenceAnagrams(sentence) === List(Nil))
+  }
+  
   // test("sentence anagrams: Linux rulez") {
   //   val sentence = List("Linux", "rulez")
   //   val anas = List(
