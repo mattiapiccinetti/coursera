@@ -84,16 +84,16 @@ object Anagrams {
    */
 
   def combinations(occurrences: Occurrences): List[Occurrences] = {
-    def isValidCombination(combo: List[(Char, Int)]) = {
-      val c = combo map { _._1 }
-      c.distinct.size == c.size
+    def hasNoDuplicates(combo: List[(Char, Int)]) = {
+      val chars = combo map { _._1 }
+      chars.distinct.size == chars.size
     }
 
     occurrences.flatMap { case (c, n) => (1 to n) map { (c, _) } }
       .toSet
       .subsets
-      .map { _ toList }
-      .filter { x => x.size <= occurrences.size && isValidCombination(x) }
+      .map { _.toList.sorted }
+      .filter { values => values.size <= occurrences.size && hasNoDuplicates(values) }
       .toList
   }
 
