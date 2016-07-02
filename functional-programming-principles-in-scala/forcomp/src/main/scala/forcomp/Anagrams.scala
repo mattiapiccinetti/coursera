@@ -22,6 +22,10 @@ object Anagrams {
    */
   type Occurrences = List[(Char, Int)]
 
+  type Occurrence = (Char, Int)
+
+  object Occurrence { def apply(char: Char, freq: Int): Occurrence = (char, freq) }
+
   /** The dictionary is simply a sequence of words.
    *  It is predefined and obtained as a sequence using the utility method `loadDictionary`.
    */
@@ -35,7 +39,7 @@ object Anagrams {
    *  Note: you must use `groupBy` to implement this method!
    */
   def wordOccurrences(w: Word): Occurrences =
-    w.toLowerCase.groupBy(identity).map { case (k, v) => (k, v.size) }.toList.sorted
+    w.toLowerCase.groupBy(identity).map { case (k, v) => Occurrence(k, v.size) }.toList.sorted
 
   /** Converts a sentence into its character occurrence list. */
   def sentenceOccurrences(s: Sentence): Occurrences = wordOccurrences(s mkString)
